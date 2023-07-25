@@ -8,7 +8,9 @@ import { CreationError, DeleteError, GetAllError, UpdateError, RecordNotFoundErr
 export interface PatientController {
     getAllPatient(req: Request, res: Response): void
     createPatient(req: Request, res: Response): void  
-    getPatientById(req: Request, res: Response): void  
+    getPatientById(req: Request, res: Response): void 
+    updatePatient(req: Request, res: Response): void
+    deletePatient(req: Request, res: Response): void
 }
 
 export class PatientControllerImpl implements PatientController {
@@ -68,6 +70,43 @@ export class PatientControllerImpl implements PatientController {
                 res.status(400).json({error: error.message})
             } else {
                 res.status(400).json({error: "Failed to retrieve patient"})
+            }
+        }
+    }
+
+    public async updatePatient (req: Request, res: Response): Promise<void> {
+        try{
+            const id = parseInt(req.params.id)
+            if (isNaN(id)){
+                throw new Error("Id must be a number") 
+            }
+            const updates = req.body
+            const patient = await this.patientService.updatePatient(id, updates)
+            res.status(200).json(patient)
+        } catch (error) {
+            logger.error(error)
+            if (error instanceof UpdateError){
+                res.status(400).json({error: error.message})
+            } else {
+                res.status(400).json({error: "Failed to update patient"})
+            }
+        }
+    }
+
+    public async deletePatient (req: Request, res: Response): Promise<void> {
+        try{
+            const id = parseInt(req.params.id)
+            if (isNaN(id)){
+                throw new Error("Id must be a number") 
+            }
+            await this.patientService.deltePatient(id)
+            res.status(200).json({message: "Patient deleted"})
+        } catch (error) {
+            logger.error(error)
+            if (error instanceof DeleteError){
+                res.status(400).json({error: error.message})
+            } else {
+                res.status(400).json({error: "Failed to delete patient"})
             }
         }
     }

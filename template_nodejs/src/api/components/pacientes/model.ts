@@ -13,4 +13,6 @@ export interface PatientReq {
     apellido: string
     identificacion: string
     telefono?: number
+    createdAt: Date
+    updatedAt: Date
 }
