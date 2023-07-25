@@ -2,7 +2,7 @@ import { Appointment } from './model'
 import { Request, Response } from 'express'
 import { AppointmentService } from './service'
 import logger from '../../../utils/logger'
-import { DoctorCreationError, DoctorDeleteError, DoctorGetAllError, DoctorUpdateError, RecordNotFoundError } from '../../../utils/customErrors'
+import { CreationError, DeleteError, GetAllError, UpdateError, RecordNotFoundError } from '../../../utils/customErrors'
 
 
 export interface AppointmentController {
